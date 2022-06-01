@@ -1,9 +1,14 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import { getPlaceholderData } from 'Utils/Api';
+import SearchBar from 'Components/SearchBar';
 
 function App() {
   const [data, setData] = useState(undefined);
+
+  function filterFunction(object: any) {
+    return `${object.title}`;
+  }
 
   useEffect(() => {
     (async () => {
@@ -19,6 +24,7 @@ function App() {
     return (
       <div className="App" data-testid='dataTest'>
         Data search box:
+        <SearchBar data={data} filterFunction={filterFunction} />
       </div>
     );
   else
