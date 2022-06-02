@@ -1,0 +1,32 @@
+.filter-box{
+    padding: 12px;
+    display: flex;
+    flex-direction: row;
+    border-radius: 5px;
+    column-gap: 5px;
+    align-items: center;
+    justify-content: space-between;
+    max-width: calc(100% - 24px - 2px);
+    color:var(--dark-text);
+    flex-grow: 2;
+    background-color: var(--grey);
+}
+
+.filter-box p{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    user-select: none;
+    flex-shrink: 2;
+}
+
+.close-button{
+    flex-shrink: 0;
+    cursor: pointer;
+    height: 0.9em;
+    width: 0.9em;
+}
+
+.close-button:hover{
+    fill: var(--pink);
+}
