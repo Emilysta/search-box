@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import { getPlaceholderData } from 'Utils/Api';
 import SearchBar from 'Components/SearchBar/SearchBar';
+import ToggleGroup from 'Components/ToggleGroup/ToggleGroup';
 
 function App() {
   const [data, setData] = useState(undefined);
@@ -24,6 +25,7 @@ function App() {
   if (data)
     return (
       <div className="App" data-testid='dataTest'>
+        <ToggleGroup buttonsList={['Posts', 'Users', 'Photos', 'Tags']} name='dataToggleBar' />
         Data search box:
         <SearchBar data={data} filterFunction={filterFunction} />
       </div>
