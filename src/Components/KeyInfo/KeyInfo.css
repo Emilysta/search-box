@@ -1,0 +1,15 @@
+.key-info-box{
+    display: flex;
+    flex-direction: row;
+    column-gap: 5px;
+    align-items: center;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--dark-text);
+}
+
+.key{
+    border: 1px solid var(--darker-grey);
+    border-radius: 5px;
+    padding: 5px;
+}

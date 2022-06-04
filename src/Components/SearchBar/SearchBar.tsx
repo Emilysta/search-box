@@ -1,8 +1,9 @@
 import SingleFilterBox from "Components/SingleFilterBox/SingleFilterBox";
 import React, { useEffect, useState } from "react";
 import './SearchBar.css';
-import { Search, ArrowReturnLeft } from 'react-bootstrap-icons';
+import { Search, ArrowReturnLeft, Plus } from 'react-bootstrap-icons';
 import { filterData } from 'Utils/Filter';
+import KeyInfo from "Components/KeyInfo/KeyInfo";
 
 export type SearchBarProps = {
     data: any[],
@@ -16,16 +17,18 @@ export default function SearchBar(props: SearchBarProps) {
     const [filters, setFilters] = useState<any[]>(Array(0));
     const [hints, setHints] = useState<any[]>(Array(0));
     const [selectedIndex, setSelectedIndex] = useState(0);
-    const [hintsVisibility, setHintsVisibility] = useState(false);
     const [search, setSearch] = useState('');
 
     useEffect(() => {
-        let newData: any[] = new Array(0);
-        props.data.forEach(element => {
-            newData.push({ text: props.filterFunction(element), data: element });
-        });
-        setConvertedData(newData);
-        setHints(newData);
+        if (props.data) {
+            let newData: any[] = new Array(0);
+            props.data.forEach(element => {
+                newData.push({ text: props.filterFunction(element), data: element });
+            });
+            setConvertedData(newData);
+            setHints(newData.slice(0, 10));
+            setFilters(Array(0));
+        }
     }, [props.data])
 
     useEffect(() => {
@@ -35,10 +38,7 @@ export default function SearchBar(props: SearchBarProps) {
 
     function onClose(filterData: any, ind?: number) {
         let index: number;
-        if (ind)
-            index = ind;
-        else
-            index = filters?.indexOf(filterData);
+        index = ind ? ind : filters?.indexOf(filterData);
         if (index > -1) {
             setFilters(filters?.filter((_, i) => i !== index));
         }
@@ -46,7 +46,7 @@ export default function SearchBar(props: SearchBarProps) {
 
     function onChange(e: React.ChangeEvent<HTMLInputElement>) {
         let data = filterData(e.target.value, convertedData);
-        setHints(data);
+        setHints(data.slice(0, 10));
         setSearch(e.target.value);
     }
 
@@ -56,29 +56,30 @@ export default function SearchBar(props: SearchBarProps) {
         let lastIndex = hints.length - 1;
         switch (key) {
             case "ArrowUp": {
+                e.preventDefault();
                 index -= 1;
-                if (index < 0)
-                    index = lastIndex;
+                if (index < 0) index = lastIndex;
                 setSelectedIndex(index);
                 break;
             }
             case "ArrowDown": {
+                e.preventDefault();
                 index += 1;
-                if (index > lastIndex)
-                    index = 0;
+                if (index > lastIndex) index = 0;
                 setSelectedIndex(index);
                 break;
             }
             case "Enter": {
                 let filter = hints.at(selectedIndex);
-                if (filter) {
-                    if (!filters.includes(filter))
-                        setFilters([...filters, hints.at(selectedIndex)])
-                }
-                else {
-                    if (filters.filter(e => e.text === search).length === 0)
-                        setFilters([...filters, { text: search, data: null }])
-                }
+                if (!filters.includes(filter))
+                    setFilters([...filters, hints.at(selectedIndex)])
+                e.currentTarget.value = '';
+                break;
+            }
+            case "Tab": {
+                e.preventDefault();
+                if (filters.filter(e => e.text === search).length === 0)
+                    setFilters([...filters, { text: search, data: null }])
                 e.currentTarget.value = '';
                 break;
             }
@@ -91,12 +92,14 @@ export default function SearchBar(props: SearchBarProps) {
             setSelectedIndex(parseInt(index));
     }
 
-    function toggleHintsVisibility(state: boolean) {
-        setHintsVisibility(state);
+    function onHintDoubleSelection(e: React.MouseEvent<HTMLDivElement>) {
+        let filter = hints.at(selectedIndex);
+        if (!filters.includes(filter))
+            setFilters([...filters, hints.at(selectedIndex)])
     }
 
     return (
-        <div className={`search-box ${hintsVisibility ? 'visible-hints' : ''}`} onBlur={() => toggleHintsVisibility(false)} onFocus={() => toggleHintsVisibility(true)} onKeyDown={onKeyDown}>
+        <div className={`search-box`} >
             <div className="search-bar-box">
                 {
                     filters?.map((element, i) => {
@@ -106,21 +109,27 @@ export default function SearchBar(props: SearchBarProps) {
                     })
                 }
                 <Search className="search-icon" />
-                <input className='search-input' type='search' placeholder='Search here' onChange={onChange} />
+                <input className='search-input' type='search' placeholder='Search here' onChange={onChange} onKeyDown={onKeyDown} />
+                <div className="navigation-info-box">
+                    <KeyInfo keyText="⭲ Tab" info="Add tag" />
+                    <KeyInfo keyText="↲ Enter" info="Choose tag from list" />
+                    <KeyInfo keyText="ᛨ Arrows" info="Navigate" />
+                </div>
             </div>
-            <div className={`search-dropdown ${hintsVisibility ? 'visible-hints' : ''}`}>
+            <div className={`search-dropdown`}>
                 {
-                    hints?.slice(0, props.maxHints ? props.maxHints : 10)?.map((element, i) => {
+                    hints?.map((element, i) => {
                         const start: number = element.text.search(search);
                         const finish: number = start + search.length;
                         return (
-                            <div className={`hint ${i === selectedIndex ? 'focused' : ''}`} key={i} data-key={i} onClick={onHintSelection}>
+                            <div className={`hint ${i === selectedIndex ? 'focused' : ''}`} key={i} data-key={i} onClick={onHintSelection} onDoubleClick={onHintDoubleSelection} tabIndex={1}>
                                 <p>
+                                    {/* <small><Plus /> Add </small> */}
                                     {element.text.substring(0, start)}
                                     <strong>{element.text.substring(start, finish)}</strong>
                                     {element.text.substring(finish)}
                                 </p>
-                                {i === selectedIndex && <div className="hint-enter-icon"><p>Enter</p> <ArrowReturnLeft /></div>}
+                                {i === selectedIndex && <div className="hint-enter-icon"><p style={{ fontSize: '12px' }}>Enter</p> <ArrowReturnLeft /></div>}
                             </div>
                         )
                     })
