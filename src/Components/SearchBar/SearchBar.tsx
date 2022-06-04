@@ -71,7 +71,7 @@ export default function SearchBar(props: SearchBarProps) {
             }
             case "Enter": {
                 let filter = hints.at(selectedIndex);
-                if (!filters.includes(filter))
+                if (filter && !filters.includes(filter))
                     setFilters([...filters, hints.at(selectedIndex)])
                 e.currentTarget.value = '';
                 break;
@@ -119,12 +119,11 @@ export default function SearchBar(props: SearchBarProps) {
             <div className={`search-dropdown`}>
                 {
                     hints?.map((element, i) => {
-                        const start: number = element.text.search(search);
+                        const start: number = element.text.toUpperCase().search(search.toUpperCase());
                         const finish: number = start + search.length;
                         return (
                             <div className={`hint ${i === selectedIndex ? 'focused' : ''}`} key={i} data-key={i} onClick={onHintSelection} onDoubleClick={onHintDoubleSelection} tabIndex={1}>
                                 <p>
-                                    {/* <small><Plus /> Add </small> */}
                                     {element.text.substring(0, start)}
                                     <strong>{element.text.substring(start, finish)}</strong>
                                     {element.text.substring(finish)}

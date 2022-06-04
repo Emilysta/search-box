@@ -1,15 +1,15 @@
 function startsWith(text: string, toTest: string): boolean {
-    let regex = new RegExp(`^${text}`);
+    let regex = new RegExp(`^${text}`, 'i');
     return regex.test(toTest);
 }
 
 function endsWith(text: string, toTest: string): boolean {
-    let regex = new RegExp(`${text}$`);
+    let regex = new RegExp(`${text}$`, 'i');
     return regex.test(toTest);
 }
 
 function contains(text: string, toTest: string): boolean {
-    let regex = new RegExp(`${text}`);
+    let regex = new RegExp(`${text}`, 'i');
     return regex.test(toTest);
 }
 
