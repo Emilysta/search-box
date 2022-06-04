@@ -1,7 +1,7 @@
 import SingleFilterBox from "Components/SingleFilterBox/SingleFilterBox";
 import React, { useEffect, useState } from "react";
 import './SearchBar.css';
-import { Search, ArrowReturnLeft, Plus } from 'react-bootstrap-icons';
+import { Search, ArrowReturnLeft } from 'react-bootstrap-icons';
 import { filterData } from 'Utils/Filter';
 import KeyInfo from "Components/KeyInfo/KeyInfo";
 
@@ -71,16 +71,20 @@ export default function SearchBar(props: SearchBarProps) {
             }
             case "Enter": {
                 let filter = hints.at(selectedIndex);
-                if (filter && !filters.includes(filter))
+                if (filter && !filters.includes(filter)) {
                     setFilters([...filters, hints.at(selectedIndex)])
-                e.currentTarget.value = '';
+                    e.currentTarget.value = '';
+                    setSearch('');
+                }
                 break;
             }
             case "Tab": {
                 e.preventDefault();
-                if (filters.filter(e => e.text === search).length === 0)
+                if (search.length > 0 && filters.filter(e => e.text === search).length === 0) {
                     setFilters([...filters, { text: search, data: null }])
-                e.currentTarget.value = '';
+                    e.currentTarget.value = '';
+                    setSearch('');
+                }
                 break;
             }
         }
@@ -114,6 +118,8 @@ export default function SearchBar(props: SearchBarProps) {
                     <KeyInfo keyText="⭲ Tab" info="Add tag" />
                     <KeyInfo keyText="↲ Enter" info="Choose tag from list" />
                     <KeyInfo keyText="ᛨ Arrows" info="Navigate" />
+                    <KeyInfo keyText="Mouse Click" info="Choose tag from list" />
+                    <KeyInfo keyText="Mouse Dbl Click" info="Add tag" />
                 </div>
             </div>
             <div className={`search-dropdown`}>

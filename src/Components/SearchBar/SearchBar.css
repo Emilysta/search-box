@@ -98,10 +98,15 @@
 .hint{
     padding: 8px;
     border-radius: 5px;
+    border: 1px solid transparent;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+}
+
+.hint:hover{
+    border-color: var(--pink);
 }
 
 .hint p{
