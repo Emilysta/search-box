@@ -31,6 +31,10 @@ function App() {
         result = filterFunctionPhotos(object);
         break;
       }
+      case 'Tags': {
+        result = filterFunctionTags(object);
+        break;
+      }
     }
     return result;
   }
@@ -45,7 +49,8 @@ function App() {
         }
       })()
     else {
-
+      let json = require('../Utils/Tags.json');
+      setData(json);
     }
   }, [dataType]);
 
@@ -53,7 +58,7 @@ function App() {
   if (data) {
     return (
       <div className="App" data-testid='dataTest'>
-        <ToggleGroup buttonsList={['Posts', 'Users', 'Photos']} name='dataToggleBar' onSelectionChange={onSelectionChange} />
+        <ToggleGroup buttonsList={['Posts', 'Users', 'Photos', 'Tags']} name='dataToggleBar' onSelectionChange={onSelectionChange} />
         Data search box:
         <SearchBar data={data} filterFunction={filterFunction} />
       </div>

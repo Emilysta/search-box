@@ -19,6 +19,7 @@ export function filterData(text: string, data: any[]): any[] {
     let filteredData1 = data.filter(element => startsWith(text, element.text));
     let filteredData2 = data.filter(element => contains(text, element.text));
     let filteredData3 = data.filter(element => endsWith(text, element.text));
-    let filteredData = filteredData1.concat(filteredData2, filteredData3);
+    let filteredData = Array.from(new Set([...filteredData1, ...filteredData2, ...filteredData3]));
+
     return filteredData;
 }
