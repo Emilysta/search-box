@@ -90,7 +90,7 @@ export default function SearchBar(props: SearchBarProps) {
             }
             case "Tab": {
                 e.preventDefault();
-                let hint = hints.filter(e => e.text === search);
+                let hint = hints.filter(e => e.text.toUpperCase() === search.toUpperCase());
                 if (hint.length > 0) {
                     setFilters([...filters, hint[0]])
                     setConvertedData(convertedData.filter(x => x !== hint[0]));
@@ -98,7 +98,7 @@ export default function SearchBar(props: SearchBarProps) {
                         inputElement.current.value = '';
                     setSearch('');
                 }
-                if (search.length > 0 && filters.filter(e => e.text === search).length === 0) {
+                if (search.length > 0 && filters.filter(e => e.text.toUpperCase() === search.toUpperCase()).length === 0) {
                     setFilters([...filters, { text: search, data: null }])
                     if (inputElement.current)
                         inputElement.current.value = '';
@@ -144,7 +144,7 @@ export default function SearchBar(props: SearchBarProps) {
                     <Search className="search-icon" />
                     <input className='search-input' type='search' placeholder='Search here' onChange={onChange} onKeyDown={onKeyDown} ref={inputElement} />
                     <div className="navigation-info-box">
-                        <KeyInfo keyText="⭲ Tab" info="Add tag" />
+                        <KeyInfo keyText="⭲ Tab" info="Add currently typed tag" />
                         <KeyInfo keyText="↲ Enter" info="Choose tag from list" />
                         <KeyInfo keyText="ᛨ Arrows" info="Navigate" />
                         <KeyInfo keyText="Mouse Click" info="Choose tag from list" />
