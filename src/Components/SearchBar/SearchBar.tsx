@@ -4,6 +4,8 @@ import './SearchBar.css';
 import { Search, ArrowReturnLeft } from 'react-bootstrap-icons';
 import { filterData } from 'Utils/Filter';
 import KeyInfo from "Components/KeyInfo/KeyInfo";
+import Snackbar from "Components/Snackbar/Snackbar";
+import { useSnackbar } from "Utils/SnackbarHook";
 
 export type SearchBarProps = {
     data: any[],
@@ -19,6 +21,7 @@ export default function SearchBar(props: SearchBarProps) {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [search, setSearch] = useState('');
     const inputElement = useRef<HTMLInputElement>(null);
+    const [showSnackbar] = useSnackbar('errorText');
 
     useEffect(() => {
         if (props.data) {
@@ -87,11 +90,22 @@ export default function SearchBar(props: SearchBarProps) {
             }
             case "Tab": {
                 e.preventDefault();
+                let hint = hints.filter(e => e.text === search);
+                if (hint.length > 0) {
+                    setFilters([...filters, hint[0]])
+                    setConvertedData(convertedData.filter(x => x !== hint[0]));
+                    if (inputElement.current)
+                        inputElement.current.value = '';
+                    setSearch('');
+                }
                 if (search.length > 0 && filters.filter(e => e.text === search).length === 0) {
                     setFilters([...filters, { text: search, data: null }])
                     if (inputElement.current)
                         inputElement.current.value = '';
                     setSearch('');
+                }
+                else {
+                    showSnackbar('Already chosen');
                 }
                 break;
             }
@@ -111,51 +125,53 @@ export default function SearchBar(props: SearchBarProps) {
         if (!filters.includes(filter)) {
             setConvertedData(convertedData.filter(x => x !== filter));
             setFilters([...filters, hints.at(selectedIndex)])
-
         }
         if (inputElement.current)
             inputElement.current.focus();
     }
 
     return (
-        <div className={`search-box`} >
-            <div className="search-bar-box">
-                {
-                    filters?.map((element, i) => {
-                        return (
-                            <SingleFilterBox filterData={element} onCloseAction={onClose} key={i} index={i} />
-                        )
-                    })
-                }
-                <Search className="search-icon" />
-                <input className='search-input' type='search' placeholder='Search here' onChange={onChange} onKeyDown={onKeyDown} ref={inputElement} />
-                <div className="navigation-info-box">
-                    <KeyInfo keyText="⭲ Tab" info="Add tag" />
-                    <KeyInfo keyText="↲ Enter" info="Choose tag from list" />
-                    <KeyInfo keyText="ᛨ Arrows" info="Navigate" />
-                    <KeyInfo keyText="Mouse Click" info="Choose tag from list" />
-                    <KeyInfo keyText="Mouse Dbl Click" info="Add tag" />
+        <>
+            <div className={`search-box`} >
+                <div className="search-bar-box">
+                    {
+                        filters?.map((element, i) => {
+                            return (
+                                <SingleFilterBox filterData={element} onCloseAction={onClose} key={i} index={i} />
+                            )
+                        })
+                    }
+                    <Search className="search-icon" />
+                    <input className='search-input' type='search' placeholder='Search here' onChange={onChange} onKeyDown={onKeyDown} ref={inputElement} />
+                    <div className="navigation-info-box">
+                        <KeyInfo keyText="⭲ Tab" info="Add tag" />
+                        <KeyInfo keyText="↲ Enter" info="Choose tag from list" />
+                        <KeyInfo keyText="ᛨ Arrows" info="Navigate" />
+                        <KeyInfo keyText="Mouse Click" info="Choose tag from list" />
+                        <KeyInfo keyText="Mouse Dbl Click" info="Add tag" />
+                    </div>
+                </div>
+                <div className={`search-dropdown`}>
+                    {
+                        hints?.map((element, i) => {
+                            const start: number = element.text.toUpperCase().search(search.toUpperCase());
+                            const finish: number = start + search.length;
+                            return (
+                                <div className={`hint ${i === selectedIndex ? 'focused' : ''}`} key={i} data-key={i} onClick={onHintSelection} onDoubleClick={onHintDoubleSelection} tabIndex={1}>
+                                    <p>
+                                        {element.text.substring(0, start)}
+                                        <strong>{element.text.substring(start, finish)}</strong>
+                                        {element.text.substring(finish)}
+                                    </p>
+                                    {i === selectedIndex && <div className="hint-enter-icon"><p style={{ fontSize: '12px' }}>Enter</p> <ArrowReturnLeft /></div>}
+                                </div>
+                            )
+                        })
+                    }
                 </div>
             </div>
-            <div className={`search-dropdown`}>
-                {
-                    hints?.map((element, i) => {
-                        const start: number = element.text.toUpperCase().search(search.toUpperCase());
-                        const finish: number = start + search.length;
-                        return (
-                            <div className={`hint ${i === selectedIndex ? 'focused' : ''}`} key={i} data-key={i} onClick={onHintSelection} onDoubleClick={onHintDoubleSelection} tabIndex={1}>
-                                <p>
-                                    {element.text.substring(0, start)}
-                                    <strong>{element.text.substring(start, finish)}</strong>
-                                    {element.text.substring(finish)}
-                                </p>
-                                {i === selectedIndex && <div className="hint-enter-icon"><p style={{ fontSize: '12px' }}>Enter</p> <ArrowReturnLeft /></div>}
-                            </div>
-                        )
-                    })
-                }
-            </div>
-        </div>
+            <Snackbar id='errorText' />
+        </>
     )
 }
 
