@@ -1,5 +1,5 @@
 import SingleFilterBox from "Components/SingleFilterBox/SingleFilterBox";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import './SearchBar.css';
 import { Search, ArrowReturnLeft } from 'react-bootstrap-icons';
 import { filterData } from 'Utils/Filter';
@@ -18,6 +18,7 @@ export default function SearchBar(props: SearchBarProps) {
     const [hints, setHints] = useState<any[]>(Array(0));
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [search, setSearch] = useState('');
+    const inputElement = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         if (props.data) {
@@ -36,17 +37,21 @@ export default function SearchBar(props: SearchBarProps) {
             props.filtersChanged(filters);
     }, [filters])
 
+    useEffect(() => {
+        let data = filterData(search, convertedData);
+        setHints(data.slice(0, 10));
+    }, [search, convertedData])
+
     function onClose(filterData: any, ind?: number) {
         let index: number;
         index = ind ? ind : filters?.indexOf(filterData);
         if (index > -1) {
             setFilters(filters?.filter((_, i) => i !== index));
+            setConvertedData([...convertedData, filterData]);
         }
     }
 
     function onChange(e: React.ChangeEvent<HTMLInputElement>) {
-        let data = filterData(e.target.value, convertedData);
-        setHints(data.slice(0, 10));
         setSearch(e.target.value);
     }
 
@@ -73,7 +78,9 @@ export default function SearchBar(props: SearchBarProps) {
                 let filter = hints.at(selectedIndex);
                 if (filter && !filters.includes(filter)) {
                     setFilters([...filters, hints.at(selectedIndex)])
-                    e.currentTarget.value = '';
+                    setConvertedData(convertedData.filter(x => x !== filter));
+                    if (inputElement.current)
+                        inputElement.current.value = '';
                     setSearch('');
                 }
                 break;
@@ -82,7 +89,8 @@ export default function SearchBar(props: SearchBarProps) {
                 e.preventDefault();
                 if (search.length > 0 && filters.filter(e => e.text === search).length === 0) {
                     setFilters([...filters, { text: search, data: null }])
-                    e.currentTarget.value = '';
+                    if (inputElement.current)
+                        inputElement.current.value = '';
                     setSearch('');
                 }
                 break;
@@ -94,12 +102,19 @@ export default function SearchBar(props: SearchBarProps) {
         let index = e.currentTarget.getAttribute('data-key');
         if (index)
             setSelectedIndex(parseInt(index));
+        if (inputElement.current)
+            inputElement.current.focus();
     }
 
     function onHintDoubleSelection(e: React.MouseEvent<HTMLDivElement>) {
         let filter = hints.at(selectedIndex);
-        if (!filters.includes(filter))
+        if (!filters.includes(filter)) {
+            setConvertedData(convertedData.filter(x => x !== filter));
             setFilters([...filters, hints.at(selectedIndex)])
+
+        }
+        if (inputElement.current)
+            inputElement.current.focus();
     }
 
     return (
@@ -113,7 +128,7 @@ export default function SearchBar(props: SearchBarProps) {
                     })
                 }
                 <Search className="search-icon" />
-                <input className='search-input' type='search' placeholder='Search here' onChange={onChange} onKeyDown={onKeyDown} />
+                <input className='search-input' type='search' placeholder='Search here' onChange={onChange} onKeyDown={onKeyDown} ref={inputElement} />
                 <div className="navigation-info-box">
                     <KeyInfo keyText="⭲ Tab" info="Add tag" />
                     <KeyInfo keyText="↲ Enter" info="Choose tag from list" />
