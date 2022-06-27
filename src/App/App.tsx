@@ -6,7 +6,7 @@ import ToggleGroup from 'Components/ToggleGroup/ToggleGroup';
 import {
   convertPhotos, convertPosts,
   convertTags, convertUserAddress
-} from 'Utils/FilterFunctions';
+} from 'Utils/ConvertFunctions';
 
 function App() {
   const [data, setData] = useState(undefined);
