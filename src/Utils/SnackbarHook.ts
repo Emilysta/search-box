@@ -1,4 +1,5 @@
 import { useState } from "react";
+import styles from 'Components/Snackbar/Snackbar.module.css';
 
 export function useSnackbar(id: string) {
     const myElement = document.getElementById(id);
@@ -9,10 +10,10 @@ export function useSnackbar(id: string) {
             myElement.innerText = text;
 
         if (text !== '' && !visible) {
-            myElement?.classList.toggle('show');
+            myElement?.classList.toggle(styles.show)
             setVisible(true);
             setTimeout(() => {
-                myElement?.classList.toggle('show');
+                myElement?.classList.toggle(styles.show);
                 setVisible(false);
             }, 2800);
         }

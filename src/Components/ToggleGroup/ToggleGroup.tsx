@@ -1,4 +1,4 @@
-import './ToggleGroup.css';
+import styles from './ToggleGroup.module.css';
 
 type ToggleGroupProps = {
     buttonsList: string[],
@@ -15,12 +15,12 @@ export default function ToggleGroup(props: ToggleGroupProps) {
     }
 
     return (
-        <ul className={`toggle-group ${props.isVertical ? 'vertical-group' : 'horizontal-group'}`}>
+        <ul className={`${styles.toggle_group} ${props.isVertical ? styles.vertical_group : styles.horizontal_group}`}>
             {props.buttonsList.map((element, i) => {
                 return (
-                    <li key={i} className='toggle-group-item'>
+                    <li key={i} className={styles.toggle_group_item}>
                         <input type='radio' name={props.name} value={element} onChange={onSelectionChange} />
-                        <div>{element}</div>
+                        <p>{element}</p>
                     </li>
                 )
             })

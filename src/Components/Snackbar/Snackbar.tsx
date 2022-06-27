@@ -4,6 +4,6 @@ type SnackbarProps = {
 }
 export default function Snackbar(props: SnackbarProps) {
     return (
-        <div className={styles.Snackbar} id={props.id}></div>
+        <div className={styles.snackbar} id={props.id}></div>
     )
 }
