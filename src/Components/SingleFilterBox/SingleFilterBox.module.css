@@ -1,4 +1,4 @@
-.filter-box{
+.filter_box{
     padding: 12px;
     display: flex;
     flex-direction: row;
@@ -12,7 +12,7 @@
     background-color: var(--grey);
 }
 
-.filter-box p{
+.filter_box p{
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -20,13 +20,17 @@
     flex-shrink: 2;
 }
 
-.close-button{
+.close_button{
     flex-shrink: 0;
     cursor: pointer;
-    height: 0.9em;
-    width: 0.9em;
+    border: none;
+    background: none;
+    padding: 0;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.close-button:hover{
+.close_button:hover svg{
     fill: var(--pink);
 }

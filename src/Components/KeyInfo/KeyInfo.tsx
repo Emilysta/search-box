@@ -1,4 +1,4 @@
-import './KeyInfo.css';
+import styles from './KeyInfo.module.css';
 
 type KeyInfoProps = {
     keyText: string,
@@ -7,8 +7,8 @@ type KeyInfoProps = {
 
 export default function KeyInfo(props: KeyInfoProps) {
     return (
-        <div className="key-info-box">
-            <div className='key'>
+        <div className={styles.key_info_box}>
+            <div className={styles.key_info_key}>
                 {props.keyText}
             </div>
             {props.info}

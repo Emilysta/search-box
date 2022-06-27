@@ -1,4 +1,4 @@
-import './SingleFilterBox.css';
+import styles from './SingleFilterBox.module.css';
 import { XLg } from 'react-bootstrap-icons';
 
 type SingleFilterBoxProps = {
@@ -16,9 +16,9 @@ export default function SingleFilterBox(props: SingleFilterBoxProps) {
     }
 
     return (
-        <div className="filter-box">
+        <div className={styles.filter_box}>
             <p title={text}>{text ?? 'no text'}</p>
-            <XLg onClick={onCloseFilter} className="close-button" />
+            <button className={styles.close_button} onClick={onCloseFilter}><XLg /></button>
         </div>
     )
 }
