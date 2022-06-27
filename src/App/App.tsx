@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import './App.css';
 import { getPlaceholderData } from 'Utils/Api';
 import SearchBar from 'Components/SearchBar/SearchBar';
 import ToggleGroup from 'Components/ToggleGroup/ToggleGroup';
+import styles from './App.module.css';
 import {
   convertPhotos, convertPosts,
   convertTags, convertUserAddress
@@ -52,7 +52,7 @@ function App() {
 
   if (data) {
     return (
-      <div className="App" data-testid='dataTest'>
+      <div className={styles.App} data-testid='dataTest'>
         <ToggleGroup buttonsList={['Posts', 'Users', 'Photos', 'Tags']} name='dataToggleBar' onSelectionChange={onSelectionChange} />
         Data search box:
         <SearchBar data={data} convertFunction={convertFunction} />
@@ -61,7 +61,7 @@ function App() {
   }
   else
     return (
-      <div className="App" data-testid='loadingTest'>
+      <div className={styles.App} data-testid='loadingTest'>
         Loading data...
       </div>
     );
