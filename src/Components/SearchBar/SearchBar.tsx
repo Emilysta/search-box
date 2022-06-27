@@ -1,5 +1,5 @@
 import SingleFilterBox from "Components/SingleFilterBox/SingleFilterBox";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import styles from './SearchBar.module.css';
 import { Search } from 'react-bootstrap-icons';
 import { FilterData, filterData } from 'Utils/Filter';
@@ -11,28 +11,29 @@ import Hint from "Components/Hint/Hint";
 export type SearchBarProps = {
     data: any[],
     convertFunction: (objectToConvert: any) => string,
-    filtersChanged?: (data: any[]) => void,
+    filtersChanged?: (data: FilterData[]) => void,
     maxHints?: number;
 }
 
 export default function SearchBar(props: SearchBarProps) {
-    const [convertedData, setConvertedData] = useState<any[]>(Array(0));
-    const [filters, setFilters] = useState<any[]>(Array(0));
-    const [hints, setHints] = useState<any[]>(Array(0));
+    const [convertedData, setConvertedData] = useState<FilterData[]>([]);
+    const [filters, setFilters] = useState<FilterData[]>([]);
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [search, setSearch] = useState('');
-    const inputElement = useRef<HTMLInputElement>(null);
     const [showSnackbar] = useSnackbar('errorText');
+
+    const hints = useMemo(() =>
+        filterData(search, convertedData).slice(0, 10),
+        [search, convertedData])
 
     useEffect(() => {
         if (props.data) {
-            let newData: FilterData[] = new Array(0);
+            const newData: FilterData[] = [];
             props.data.forEach(element => {
                 newData.push({ text: props.convertFunction(element), data: element });
             });
             setConvertedData(newData);
-            setHints(newData.slice(0, 10));
-            setFilters(Array(0));
+            setFilters([]);
         }
     }, [props.data])
 
@@ -41,73 +42,68 @@ export default function SearchBar(props: SearchBarProps) {
             props.filtersChanged(filters);
     }, [filters])
 
-    useEffect(() => {
-        let data = filterData(search, convertedData);
-        setHints(data.slice(0, 10));
-    }, [search, convertedData])
-
-    function onClose(filterData: any, ind?: number) {
-        let index: number;
-        index = ind ? ind : filters?.indexOf(filterData);
+    function onClose(filterData: FilterData, ind?: number) {
+        const index = ind ? ind : filters?.indexOf(filterData);
         if (index > -1) {
             setFilters(filters?.filter((_, i) => i !== index));
             setConvertedData([...convertedData, filterData]);
         }
     }
 
-    function onChange(e: React.ChangeEvent<HTMLInputElement>) {
-        setSearch(e.target.value);
+    function modifyIndex(increment: boolean) {
+        let index = selectedIndex;
+        const lastIndex = hints.length - 1;
+        if (increment)
+            index += 1;
+        else
+            index -= 1;
+        index = Math.min(Math.max(index, 0), lastIndex);
+        setSelectedIndex(index);
+    }
+
+    function addFilter(filter: FilterData, modifyConverted: boolean = true, clearInput: boolean = true) {
+        setFilters([...filters, filter])
+        if (modifyConverted) setConvertedData(convertedData.filter(x => x !== filter));
+        if (clearInput) setSearch('');
+    }
+
+    function addNewFilter() {
+        const searchToUpper = search.toUpperCase();
+        const hint = hints.filter(e => e.text.toUpperCase() === searchToUpper);
+        if (hint.length > 0) {
+            addFilter(hint[0]);
+        }
+        if (search.length > 0 && filters.filter(e => e.text.toUpperCase() === searchToUpper).length === 0) {
+            addFilter({ text: search, data: null }, false);
+        }
+        else {
+            showSnackbar('Already chosen');
+        }
     }
 
     function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-        let key = e.key;
-        let index = selectedIndex;
-        let lastIndex = hints.length - 1;
+        const key = e.key;
         switch (key) {
             case "ArrowUp": {
                 e.preventDefault();
-                index -= 1;
-                if (index < 0) index = lastIndex;
-                setSelectedIndex(index);
+                modifyIndex(false);
                 break;
             }
             case "ArrowDown": {
                 e.preventDefault();
-                index += 1;
-                if (index > lastIndex) index = 0;
-                setSelectedIndex(index);
+                modifyIndex(true);
                 break;
             }
             case "Enter": {
-                let filter = hints.at(selectedIndex);
+                const filter = hints.at(selectedIndex);
                 if (filter && !filters.includes(filter)) {
-                    setFilters([...filters, hints.at(selectedIndex)])
-                    setConvertedData(convertedData.filter(x => x !== filter));
-                    if (inputElement.current)
-                        inputElement.current.value = '';
-                    setSearch('');
+                    addFilter(filter);
                 }
                 break;
             }
             case "Tab": {
                 e.preventDefault();
-                let hint = hints.filter(e => e.text.toUpperCase() === search.toUpperCase());
-                if (hint.length > 0) {
-                    setFilters([...filters, hint[0]])
-                    setConvertedData(convertedData.filter(x => x !== hint[0]));
-                    if (inputElement.current)
-                        inputElement.current.value = '';
-                    setSearch('');
-                }
-                if (search.length > 0 && filters.filter(e => e.text.toUpperCase() === search.toUpperCase()).length === 0) {
-                    setFilters([...filters, { text: search, data: null }])
-                    if (inputElement.current)
-                        inputElement.current.value = '';
-                    setSearch('');
-                }
-                else {
-                    showSnackbar('Already chosen');
-                }
+                addNewFilter();
                 break;
             }
         }
@@ -116,18 +112,17 @@ export default function SearchBar(props: SearchBarProps) {
     function onHintSelection(e: React.MouseEvent<HTMLButtonElement>, index?: number) {
         if (index !== undefined && index >= 0)
             setSelectedIndex(index);
-        if (inputElement.current)
-            inputElement.current.focus();
+        // if (inputElement.current)
+        //     inputElement.current.focus();
     }
 
     function onHintDoubleSelection(e: React.MouseEvent<HTMLButtonElement>) {
-        let filter = hints.at(selectedIndex);
-        if (!filters.includes(filter)) {
-            setConvertedData(convertedData.filter(x => x !== filter));
-            setFilters([...filters, hints.at(selectedIndex)])
+        const filter = hints.at(selectedIndex);
+        if (filter && !filters.includes(filter)) {
+            addFilter(filter, true, false);
         }
-        if (inputElement.current)
-            inputElement.current.focus();
+        // if (inputElement.current)
+        //     inputElement.current.focus();
     }
 
     return (
@@ -142,7 +137,7 @@ export default function SearchBar(props: SearchBarProps) {
                         })
                     }
                     <Search className={styles.search_icon} />
-                    <input className={styles.search_input} type='search' placeholder='Search here' onChange={onChange} onKeyDown={onKeyDown} ref={inputElement} />
+                    <input className={styles.search_input} type='search' placeholder='Search here' onChange={(e) => setSearch(e.target.value)} onKeyDown={onKeyDown} value={search} />
                     <div className={styles.navigation_info_box}>
                         <KeyInfo keyText="⭲ Tab" info="Add currently typed tag" />
                         <KeyInfo keyText="↲ Enter" info="Choose tag from list" />
