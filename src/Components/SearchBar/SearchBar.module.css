@@ -1,4 +1,4 @@
-.search-box{
+.search_box{
     position: relative;
     width: 60vw;
     background-color: var(--search-bg-color);
@@ -7,15 +7,15 @@
     pointer-events: all;
 }
 
-.search-box:focus-within .search-dropdown{
+.search_box:focus-within .search_dropdown{
     display: flex;
 }
 
-.search-box:focus-within{
+.search_box:focus-within{
     border-radius: 5px 5px 0 0;
 }
 
-.search-bar-box{
+.search_bar_box{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -24,11 +24,11 @@
     align-items: center;
 }
 
-.search-icon{
+.search_icon{
     fill: var(--bg-color);
 }
 
-.search-input{
+.search_input{
     border: none;
     background: none;
     outline: none;
@@ -43,11 +43,11 @@
     letter-spacing: 1px;
 }
 
-.search-input::placeholder{
+.search_input::placeholder{
     font-weight: 500;
 }
 
-.search-input::-webkit-search-cancel-button{
+.search_input::-webkit-search-cancel-button{
     -webkit-appearance: none;
     height: 20px;
     width: 20px;
@@ -58,7 +58,7 @@
     background-size: 1rem 1rem;
 }
 
-.navigation-info-box{
+.navigation_info_box{
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -68,7 +68,7 @@
     flex-wrap: wrap;
 }
 
-.search-dropdown{
+.search_dropdown{
     box-shadow: 0 0.5em 0.5em black;
     position: absolute;
     z-index: 2;
@@ -87,51 +87,6 @@
     flex-direction: column;
 }
 
-.search-dropdown.visible-hints{
+.search_dropdown.visible_hints{
     display: flex;
-}
-
-.hint{
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid transparent;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.hint:hover{
-    border-color: var(--pink);
-}
-
-.hint p{
-    flex-shrink: 2;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    user-select: none;
-}
-
-.hint.focused{
-    background-color: var(--grey);
-}
-
-.hint p strong{
-    color: var(--pink);
-}
-
-.hint-enter-icon{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    column-gap: 5px;
-    color: var(--darker-grey);
-    font-weight: 500;
-    user-select: none;
-}
-
-.hint-enter-icon svg{
-    fill: var(--darker-grey);
 }

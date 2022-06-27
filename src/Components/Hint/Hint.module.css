@@ -1,0 +1,50 @@
+.hint{
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid transparent;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background: none;
+
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+}
+
+.hint:hover{
+    border-color: var(--pink);
+}
+
+.hint.focused{
+    background-color: var(--grey);
+}
+
+.hint p{
+    flex-shrink: 2;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.hint p strong{
+    color: var(--pink);
+}
+
+.hint_enter_icon{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    column-gap: 5px;
+    color: var(--darker-grey);
+    font-weight: 500;
+    user-select: none;
+    font-size: 12px;
+}
+
+.hint_enter_icon svg{
+    fill: var(--darker-grey);
+}

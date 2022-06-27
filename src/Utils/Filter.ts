@@ -23,3 +23,8 @@ export function filterData(text: string, data: any[]): any[] {
 
     return filteredData;
 }
+
+export type FilterData = {
+    text: string,
+    data: any,
+}
