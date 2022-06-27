@@ -1,27 +1,27 @@
-function startsWith(text: string, toTest: string): boolean {
-    let regex = new RegExp(`^${text}`, 'i');
-    return regex.test(toTest);
-}
-
-function endsWith(text: string, toTest: string): boolean {
-    let regex = new RegExp(`${text}$`, 'i');
-    return regex.test(toTest);
-}
-
-function contains(text: string, toTest: string): boolean {
-    let regex = new RegExp(`${text}`, 'i');
-    return regex.test(toTest);
-}
-
-export function filterData(text: string, data: any[]): any[] {
-    if (text.length === 0)
+export function filterData(searchText: string, data: FilterData[]) {
+    if (searchText.length === 0)
         return data;
-    let filteredData1 = data.filter(element => startsWith(text, element.text));
-    let filteredData2 = data.filter(element => contains(text, element.text));
-    let filteredData3 = data.filter(element => endsWith(text, element.text));
-    let filteredData = Array.from(new Set([...filteredData1, ...filteredData2, ...filteredData3]));
+    let lastIndexOfFirst = 0;
+    let lastIndexOfSecond = 0;
 
-    return filteredData;
+    const searchLegth = searchText.length;
+    return data.reduce((result: FilterData[], element: FilterData) => {
+        const index = element.text.toLowerCase().indexOf(searchText.toLowerCase());
+        if (index === -1)
+            return result;
+        if (index === 0) {
+            result.splice(lastIndexOfFirst, 0, element);
+            lastIndexOfFirst += 1;
+            lastIndexOfSecond += 1;
+        }
+        else if (index + searchLegth - 1 === element.text.length - 1)
+            result.push(element);
+        else {
+            result.splice(lastIndexOfSecond, 0, element);
+            lastIndexOfSecond += 1;
+        }
+        return result;
+    }, []);
 }
 
 export type FilterData = {

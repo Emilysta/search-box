@@ -1,5 +1,5 @@
 import SingleFilterBox from "Components/SingleFilterBox/SingleFilterBox";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styles from './SearchBar.module.css';
 import { Search } from 'react-bootstrap-icons';
 import { FilterData, filterData } from 'Utils/Filter';
@@ -29,9 +29,10 @@ export default function SearchBar(props: SearchBarProps) {
     useEffect(() => {
         if (props.data) {
             const newData: FilterData[] = [];
-            props.data.forEach(element => {
-                newData.push({ text: props.convertFunction(element), data: element });
-            });
+            if (Array.isArray(props.data))
+                props.data.forEach(element => {
+                    newData.push({ text: props.convertFunction(element), data: element });
+                });
             setConvertedData(newData);
             setFilters([]);
         }
