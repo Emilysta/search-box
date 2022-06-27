@@ -1,16 +1,16 @@
-export function filterFunctionPosts(object: any) {
+export function convertPosts(object: any) {
     return `${object.title}`;
 }
 
-export function filterFunctionUserAddress(object: any) {
+export function convertUserAddress(object: any) {
     return `${object.address.street} ${object.address.suite} ${object.address.city}`;
 }
 
-export function filterFunctionPhotos(object: any) {
+export function convertPhotos(object: any) {
     return `${object.title}`;
 }
 
-export function filterFunctionTags(object: any) {
+export function convertTags(object: any) {
     return `${object}`;
 }
 

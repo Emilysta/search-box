@@ -4,39 +4,34 @@ import { getPlaceholderData } from 'Utils/Api';
 import SearchBar from 'Components/SearchBar/SearchBar';
 import ToggleGroup from 'Components/ToggleGroup/ToggleGroup';
 import {
-  filterFunctionPhotos, filterFunctionPosts,
-  filterFunctionTags, filterFunctionUserAddress
+  convertPhotos, convertPosts,
+  convertTags, convertUserAddress
 } from 'Utils/FilterFunctions';
 
 function App() {
   const [data, setData] = useState(undefined);
   const [dataType, setDataType] = useState('Posts');
 
-  function onSelectionChange(value: string) {
-    setDataType(value);
+  function onSelectionChange(dataType: string) {
+    setDataType(dataType);
   }
 
-  function filterFunction(object: any): string {
-    let result: string = '';
+  function convertFunction(objectToConvert: any) {
     switch (dataType) {
       case 'Posts': {
-        result = filterFunctionPosts(object);
-        break;
+        return convertPosts(objectToConvert);
       }
       case 'Users': {
-        result = filterFunctionUserAddress(object);
-        break;
+        return convertUserAddress(objectToConvert);
       }
       case 'Photos': {
-        result = filterFunctionPhotos(object);
-        break;
+        return convertPhotos(objectToConvert);
       }
       case 'Tags': {
-        result = filterFunctionTags(object);
-        break;
+        return convertTags(objectToConvert);
       }
     }
-    return result;
+    return '';
   }
 
   useEffect(() => {
@@ -49,7 +44,7 @@ function App() {
         }
       })()
     else {
-      let json = require('../Utils/Tags.json');
+      const json = require('../Utils/Tags.json');
       setData(json);
     }
   }, [dataType]);
@@ -60,7 +55,7 @@ function App() {
       <div className="App" data-testid='dataTest'>
         <ToggleGroup buttonsList={['Posts', 'Users', 'Photos', 'Tags']} name='dataToggleBar' onSelectionChange={onSelectionChange} />
         Data search box:
-        <SearchBar data={data} filterFunction={filterFunction} />
+        <SearchBar data={data} convertFunction={convertFunction} />
       </div>
     );
   }
