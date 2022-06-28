@@ -1,5 +1,5 @@
 import SingleFilterBox from "Components/SingleFilterBox/SingleFilterBox";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import styles from './SearchBar.module.css';
 import { Search } from 'react-bootstrap-icons';
 import { FilterData, filterData } from 'Utils/Filter';
@@ -21,6 +21,7 @@ export default function SearchBar(props: SearchBarProps) {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [search, setSearch] = useState('');
     const [showSnackbar] = useSnackbar('errorText');
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const hints = useMemo(() =>
         filterData(search, convertedData).slice(0, 10),
@@ -102,7 +103,7 @@ export default function SearchBar(props: SearchBarProps) {
                 }
                 break;
             }
-            case "Tab": {
+            case "A": {
                 e.preventDefault();
                 addNewFilter();
                 break;
@@ -113,8 +114,8 @@ export default function SearchBar(props: SearchBarProps) {
     function onHintSelection(e: React.MouseEvent<HTMLButtonElement>, index?: number) {
         if (index !== undefined && index >= 0)
             setSelectedIndex(index);
-        // if (inputElement.current)
-        //     inputElement.current.focus();
+        if (inputRef.current)
+            inputRef.current.focus();
     }
 
     function onHintDoubleSelection(e: React.MouseEvent<HTMLButtonElement>) {
@@ -122,8 +123,8 @@ export default function SearchBar(props: SearchBarProps) {
         if (filter && !filters.includes(filter)) {
             addFilter(filter, true, false);
         }
-        // if (inputElement.current)
-        //     inputElement.current.focus();
+        if (inputRef.current)
+            inputRef.current.focus();
     }
 
     return (
@@ -138,9 +139,9 @@ export default function SearchBar(props: SearchBarProps) {
                         })
                     }
                     <Search className={styles.search_icon} />
-                    <input className={styles.search_input} type='search' placeholder='Search here' onChange={(e) => setSearch(e.target.value)} onKeyDown={onKeyDown} value={search} />
+                    <input className={styles.search_input} type='search' placeholder='Search here' onChange={(e) => setSearch(e.target.value)} onKeyDown={onKeyDown} value={search} ref={inputRef} />
                     <div className={styles.navigation_info_box}>
-                        <KeyInfo keyText="⭲ Tab" info="Add currently typed tag" />
+                        <KeyInfo keyText="A" info="Add currently typed tag" />
                         <KeyInfo keyText="↲ Enter" info="Choose tag from list" />
                         <KeyInfo keyText="ᛨ Arrows" info="Navigate" />
                         <KeyInfo keyText="Mouse Click" info="Choose tag from list" />
