@@ -1,18 +1,17 @@
+import Hint from "Components/Hint/Hint";
+import KeyInfo from "Components/KeyInfo/KeyInfo";
 import SingleFilterBox from "Components/SingleFilterBox/SingleFilterBox";
+import Snackbar from "Components/Snackbar/Snackbar";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import styles from './SearchBar.module.css';
 import { Search } from 'react-bootstrap-icons';
 import { FilterData, filterData } from 'Utils/Filter';
-import KeyInfo from "Components/KeyInfo/KeyInfo";
-import Snackbar from "Components/Snackbar/Snackbar";
 import { useSnackbar } from "Utils/SnackbarHook";
-import Hint from "Components/Hint/Hint";
+import styles from './SearchBar.module.css';
 
 type SearchBarProps<T> = {
     data: T[],
-    convertFunction: (objectToConvert: T) => string,
-    filtersChanged?: (data: FilterData<T>[]) => void,
-    maxHints?: number;
+    convertDataCallback: (objectToConvert: T) => string,
+    filtersChanged?: (filters: FilterData<T>[]) => void,
 }
 
 export default function SearchBar<T>(props: SearchBarProps<T>) {
@@ -28,12 +27,11 @@ export default function SearchBar<T>(props: SearchBarProps<T>) {
         [search, convertedData])
 
     useEffect(() => {
-        if (props.data) {
+        if (props.data && Array.isArray(props.data)) {
             const newData: FilterData<T>[] = [];
-            if (Array.isArray(props.data))
-                props.data.forEach(element => {
-                    newData.push({ text: props.convertFunction(element), data: element });
-                });
+            props.data.forEach(element => {
+                newData.push({ text: props.convertDataCallback(element), data: element });
+            });
             setConvertedData(newData);
             setFilters([]);
         }
@@ -44,23 +42,20 @@ export default function SearchBar<T>(props: SearchBarProps<T>) {
             props.filtersChanged(filters);
     }, [filters])
 
-    function onClose(filterData: FilterData<T>, ind?: number) {
-        const index = ind ? ind : filters?.indexOf(filterData);
+    function onFilterDelete(filter: FilterData<T>, indexInList?: number) {
+        const index = indexInList ? indexInList : filters.indexOf(filter);
         if (index > -1) {
-            setFilters(filters?.filter((_, i) => i !== index));
-            setConvertedData([...convertedData, filterData]);
+            setFilters(filters.filter((_, i) => i !== index));
+            setConvertedData([...convertedData, filter]);
         }
+        if (inputRef.current)
+            inputRef.current.focus();
     }
 
-    function modifyIndex(increment: boolean) {
-        let index = selectedIndex;
+    function modifySelectedIndex(increment: boolean) {
         const lastIndex = hints.length - 1;
-        if (increment)
-            index += 1;
-        else
-            index -= 1;
-        index = Math.min(Math.max(index, 0), lastIndex);
-        setSelectedIndex(index);
+        const index = increment ? selectedIndex + 1 : selectedIndex - 1;
+        setSelectedIndex(Math.min(Math.max(index, 0), lastIndex));
     }
 
     function addFilter(filter: FilterData<T>, modifyConverted: boolean = true, clearInput: boolean = true) {
@@ -88,12 +83,12 @@ export default function SearchBar<T>(props: SearchBarProps<T>) {
         switch (key) {
             case "ArrowUp": {
                 e.preventDefault();
-                modifyIndex(false);
+                modifySelectedIndex(false);
                 break;
             }
             case "ArrowDown": {
                 e.preventDefault();
-                modifyIndex(true);
+                modifySelectedIndex(true);
                 break;
             }
             case "Enter": {
@@ -134,7 +129,7 @@ export default function SearchBar<T>(props: SearchBarProps<T>) {
                     {
                         filters?.map((element, i) => {
                             return (
-                                <SingleFilterBox filterData={element} onCloseAction={onClose} key={i} index={i} />
+                                <SingleFilterBox filterData={element} onFilterDelete={onFilterDelete} key={i} index={i} />
                             )
                         })
                     }

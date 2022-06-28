@@ -23,8 +23,9 @@ export default function Hint<T>(props: HintProps<T>) {
             props.onDoubleHintSelection(e, props.hintIndex);
     }
 
-    const text = props.hintData.text;
+
     const hintText = () => {
+        const text = props.hintData.text;
         if (props.searchText) {
             const start = text.toUpperCase().search(props.searchText.toUpperCase());
             const finish = start + props.searchText.length;

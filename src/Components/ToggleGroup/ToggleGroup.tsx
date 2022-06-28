@@ -19,7 +19,7 @@ export default function ToggleGroup(props: ToggleGroupProps) {
             {props.buttonsList.map((element, i) => {
                 return (
                     <li key={i} className={styles.toggle_group_item}>
-                        <input type='radio' name={props.name} value={element} onChange={onSelectionChange} />
+                        <input type='radio' name={props.name} value={element} onChange={onSelectionChange} defaultChecked={i === 0} />
                         <p>{element}</p>
                     </li>
                 )

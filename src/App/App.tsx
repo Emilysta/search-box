@@ -9,14 +9,15 @@ import {
 } from 'Utils/ConvertFunctions';
 
 function App() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(null);
   const [dataType, setDataType] = useState('Posts');
+  const [isError, setIsError] = useState(false);
 
   function onSelectionChange(dataType: string) {
     setDataType(dataType);
   }
 
-  function convertFunction(objectToConvert: unknown) {
+  function convertSearchBarData(objectToConvert: unknown) {
     switch (dataType) {
       case 'Posts': {
         return convertPosts(objectToConvert as Post);
@@ -34,28 +35,45 @@ function App() {
     return '';
   }
 
+  async function fetchAndSetData() {
+    try {
+      const fetchedData = await getPlaceholderData(dataType);
+      setData(fetchedData);
+    }
+    catch (err) {
+      console.error(err);
+      setIsError(true);
+    }
+  }
+
   useEffect(() => {
     if (dataType !== 'Tags')
-      (async () => {
-        const fetchedData = await getPlaceholderData(dataType);
-        if (fetchedData) {
-          const resultJson = await fetchedData.json();
-          setData(resultJson);
-        }
-      })()
+      fetchAndSetData();
     else {
-      const json = require('../Utils/Tags.json');
-      setData(json);
+      try {
+        const json = require('../Utils/Tags.json');
+        setData(json);
+      }
+      catch (err) {
+        console.error(err);
+        setIsError(true);
+      }
     }
   }, [dataType]);
 
-
-  if (data) {
+  if (isError) {
+    return (
+      <div className={styles.App} data-testid='errorTest'>
+        Ops. Something went wrong.
+      </div>
+    );
+  }
+  else if (data) {
     return (
       <div className={styles.App} data-testid='dataTest'>
         <ToggleGroup buttonsList={['Posts', 'Users', 'Photos', 'Tags']} name='dataToggleBar' onSelectionChange={onSelectionChange} />
         Data search box:
-        <SearchBar data={data} convertFunction={convertFunction} />
+        <SearchBar data={data} convertDataCallback={convertSearchBarData} />
       </div>
     );
   }

@@ -9,7 +9,7 @@ describe('testing filterData function', () => {
         convertedData.push({ text: convertTags(el), data: el });
     });
 
-    test('empty string should result in return data', () => {
+    test('empty string should result in full data array', () => {
         const searchText = '';
         expect(filterData(searchText, convertedData)).toEqual(convertedData);
     });

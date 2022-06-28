@@ -17,7 +17,7 @@ test('if loading exists', async () => {
 });
 
 test('if data exists', async () => {
-  let data = { title: 'lol' }
+  const data = { title: 'some title' }
 
   React.useState = jest.fn().mockReturnValue([data, {}])
   render(<App />);
