@@ -1,6 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
-
-#root{
+body{
+  margin: 0;
+  padding: 0;
   width: 100%;
   height: 100%;
   --bg-color: #141518;
@@ -11,13 +11,6 @@
   --darker-grey:#7d7d81;
   --pink:#DA627D;
   background-color: var(--bg-color);
-}
-
-html,body{
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
 }
 
 body {
