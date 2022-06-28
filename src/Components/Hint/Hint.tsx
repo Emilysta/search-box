@@ -19,7 +19,7 @@ export default function Hint(props: HintProps) {
     }
 
     function onDoubleClick(e: React.MouseEvent<HTMLButtonElement>) {
-        if (props.onDoubleHintSelection !== undefined && props.hintIndex)
+        if (props.onDoubleHintSelection)
             props.onDoubleHintSelection(e, props.hintIndex);
     }
 

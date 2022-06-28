@@ -152,7 +152,7 @@ export default function SearchBar(props: SearchBarProps) {
                     {
                         hints?.map((hint, i) => {
                             return (
-                                <Hint hintData={hint} isSelected={i === selectedIndex} hintIndex={i} key={i} onHintSelection={onHintSelection} onDoubleHintSelection={onHintDoubleSelection} />
+                                <Hint hintData={hint} isSelected={i === selectedIndex} hintIndex={i} key={i} searchText={search} onHintSelection={onHintSelection} onDoubleHintSelection={onHintDoubleSelection} />
                             )
                         })
                     }
