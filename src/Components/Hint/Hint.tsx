@@ -2,16 +2,16 @@ import styles from './Hint.module.css';
 import { ArrowReturnLeft } from 'react-bootstrap-icons';
 import { FilterData } from 'Utils/Filter';
 
-type HintProps = {
+type HintProps<T> = {
     isSelected?: boolean,
-    hintData: FilterData,
-    onHintSelection?: (e: React.MouseEvent<HTMLButtonElement>, index?: number) => void; //toDo
+    hintData: FilterData<T>,
+    onHintSelection?: (e: React.MouseEvent<HTMLButtonElement>, index?: number) => void;
     onDoubleHintSelection?: (e: React.MouseEvent<HTMLButtonElement>, index?: number) => void;
     hintIndex?: number,
     searchText?: string,
 }
 
-export default function Hint(props: HintProps) {
+export default function Hint<T>(props: HintProps<T>) {
 
     function onClick(e: React.MouseEvent<HTMLButtonElement>) {
         if (props.onHintSelection)

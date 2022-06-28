@@ -5,30 +5,30 @@ import ToggleGroup from 'Components/ToggleGroup/ToggleGroup';
 import styles from './App.module.css';
 import {
   convertPhotos, convertPosts,
-  convertTags, convertUserAddress
+  convertTags, convertUserAddress, Photo, Post, User
 } from 'Utils/ConvertFunctions';
 
 function App() {
-  const [data, setData] = useState(undefined);
+  const [data, setData] = useState([]);
   const [dataType, setDataType] = useState('Posts');
 
   function onSelectionChange(dataType: string) {
     setDataType(dataType);
   }
 
-  function convertFunction(objectToConvert: any) {
+  function convertFunction(objectToConvert: unknown) {
     switch (dataType) {
       case 'Posts': {
-        return convertPosts(objectToConvert);
+        return convertPosts(objectToConvert as Post);
       }
       case 'Users': {
-        return convertUserAddress(objectToConvert);
+        return convertUserAddress(objectToConvert as User);
       }
       case 'Photos': {
-        return convertPhotos(objectToConvert);
+        return convertPhotos(objectToConvert as Photo);
       }
       case 'Tags': {
-        return convertTags(objectToConvert);
+        return convertTags(objectToConvert as string);
       }
     }
     return '';

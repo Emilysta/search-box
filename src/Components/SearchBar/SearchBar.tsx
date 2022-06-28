@@ -8,16 +8,16 @@ import Snackbar from "Components/Snackbar/Snackbar";
 import { useSnackbar } from "Utils/SnackbarHook";
 import Hint from "Components/Hint/Hint";
 
-export type SearchBarProps = {
-    data: any[],
-    convertFunction: (objectToConvert: any) => string,
-    filtersChanged?: (data: FilterData[]) => void,
+type SearchBarProps<T> = {
+    data: T[],
+    convertFunction: (objectToConvert: T) => string,
+    filtersChanged?: (data: FilterData<T>[]) => void,
     maxHints?: number;
 }
 
-export default function SearchBar(props: SearchBarProps) {
-    const [convertedData, setConvertedData] = useState<FilterData[]>([]);
-    const [filters, setFilters] = useState<FilterData[]>([]);
+export default function SearchBar<T>(props: SearchBarProps<T>) {
+    const [convertedData, setConvertedData] = useState<FilterData<T>[]>([]);
+    const [filters, setFilters] = useState<FilterData<T>[]>([]);
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [search, setSearch] = useState('');
     const [showSnackbar] = useSnackbar('errorText');
@@ -29,7 +29,7 @@ export default function SearchBar(props: SearchBarProps) {
 
     useEffect(() => {
         if (props.data) {
-            const newData: FilterData[] = [];
+            const newData: FilterData<T>[] = [];
             if (Array.isArray(props.data))
                 props.data.forEach(element => {
                     newData.push({ text: props.convertFunction(element), data: element });
@@ -44,7 +44,7 @@ export default function SearchBar(props: SearchBarProps) {
             props.filtersChanged(filters);
     }, [filters])
 
-    function onClose(filterData: FilterData, ind?: number) {
+    function onClose(filterData: FilterData<T>, ind?: number) {
         const index = ind ? ind : filters?.indexOf(filterData);
         if (index > -1) {
             setFilters(filters?.filter((_, i) => i !== index));
@@ -63,7 +63,7 @@ export default function SearchBar(props: SearchBarProps) {
         setSelectedIndex(index);
     }
 
-    function addFilter(filter: FilterData, modifyConverted: boolean = true, clearInput: boolean = true) {
+    function addFilter(filter: FilterData<T>, modifyConverted: boolean = true, clearInput: boolean = true) {
         setFilters([...filters, filter])
         if (modifyConverted) setConvertedData(convertedData.filter(x => x !== filter));
         if (clearInput) setSearch('');

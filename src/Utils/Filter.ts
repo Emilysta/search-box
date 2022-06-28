@@ -1,11 +1,11 @@
-export function filterData(searchText: string, data: FilterData[]) {
+export function filterData<T>(searchText: string, data: FilterData<T>[]) {
     if (searchText.length === 0)
         return data;
     let lastIndexOfFirst = 0;
     let lastIndexOfSecond = 0;
 
     const searchLegth = searchText.length;
-    return data.reduce((result: FilterData[], element: FilterData) => {
+    return data.reduce((result: FilterData<T>[], element: FilterData<T>) => {
         const index = element.text.toLowerCase().indexOf(searchText.toLowerCase());
         if (index === -1)
             return result;
@@ -24,7 +24,7 @@ export function filterData(searchText: string, data: FilterData[]) {
     }, []);
 }
 
-export type FilterData = {
+export type FilterData<T> = {
     text: string,
-    data: any,
+    data: T | null,
 }

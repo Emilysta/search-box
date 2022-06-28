@@ -2,13 +2,13 @@ import styles from './SingleFilterBox.module.css';
 import { XLg } from 'react-bootstrap-icons';
 import { FilterData } from 'Utils/Filter';
 
-type SingleFilterBoxProps = {
-    filterData: FilterData;
+type SingleFilterBoxProps<T> = {
+    filterData: FilterData<T>;
     index?: number,
-    onCloseAction: (filterData: FilterData, index?: number) => void,
+    onCloseAction: (filterData: FilterData<T>, index?: number) => void,
 }
 
-export default function SingleFilterBox(props: SingleFilterBoxProps) {
+export default function SingleFilterBox<T>(props: SingleFilterBoxProps<T>) {
     const text = props.filterData.text;
 
     function onCloseFilter() {
