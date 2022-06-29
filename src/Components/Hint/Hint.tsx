@@ -27,7 +27,7 @@ export default function Hint<T>(props: HintProps<T>) {
     const hintText = () => {
         const text = props.hintData.text;
         if (props.searchText) {
-            const start = text.toUpperCase().search(props.searchText.toUpperCase());
+            const start = text.toUpperCase().indexOf(props.searchText.toUpperCase());
             const finish = start + props.searchText.length;
             return (<p>
                 {text.substring(0, start)}
