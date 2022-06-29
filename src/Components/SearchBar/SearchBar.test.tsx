@@ -1,6 +1,6 @@
 import SearchBar from './SearchBar';
 import '@testing-library/jest-dom/extend-expect';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { convertTags } from 'Utils/ConvertFunctions';
 import userEvent from '@testing-library/user-event';
 
