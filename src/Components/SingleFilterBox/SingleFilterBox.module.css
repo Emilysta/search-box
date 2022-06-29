@@ -9,6 +9,7 @@
     max-width: calc(100% - 24px - 2px);
     color:var(--dark-text);
     flex-grow: 2;
+    font-size: 15px;
     background-color: var(--grey);
 }
 

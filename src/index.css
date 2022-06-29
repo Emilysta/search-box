@@ -10,6 +10,7 @@ body{
   --grey:#ceced3;
   --darker-grey:#7d7d81;
   --pink:#DA627D;
+  --light-pink:#da92a2;
   background-color: var(--bg-color);
 }
 

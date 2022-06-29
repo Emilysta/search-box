@@ -10,15 +10,19 @@
 
     font-family: inherit;
     font-weight: inherit;
-    font-size: inherit;
+    font-size: 15px;
 }
 
 .hint:hover{
-    border-color: var(--pink);
+    background-color: var(--light-pink);
 }
 
-.hint.focused{
+.hint.selected{
     background-color: var(--grey);
+}
+
+.hint.selected:hover{
+    background-color: var(--light-pink);
 }
 
 .hint p{
