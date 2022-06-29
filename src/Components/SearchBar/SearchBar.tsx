@@ -17,7 +17,7 @@ type SearchBarProps<T> = {
 export default function SearchBar<T>(props: SearchBarProps<T>) {
     const [convertedData, setConvertedData] = useState<FilterData<T>[]>([]);
     const [filters, setFilters] = useState<FilterData<T>[]>([]);
-    const [selectedIndex, setSelectedIndex] = useState(0);
+    const [selectedIndex, setSelectedIndex] = useState(-1);
     const [search, setSearch] = useState('');
     const [showSnackbar] = useSnackbar('errorText');
     const inputRef = useRef<HTMLInputElement>(null);
@@ -55,7 +55,7 @@ export default function SearchBar<T>(props: SearchBarProps<T>) {
     function modifySelectedIndex(increment: boolean) {
         const lastIndex = hints.length - 1;
         const index = increment ? selectedIndex + 1 : selectedIndex - 1;
-        setSelectedIndex(Math.min(Math.max(index, 0), lastIndex));
+        setSelectedIndex(Math.min(Math.max(index, -1), lastIndex));
     }
 
     function addFilter(filter: FilterData<T>, modifyConverted: boolean = true, clearInput: boolean = true) {
@@ -98,11 +98,10 @@ export default function SearchBar<T>(props: SearchBarProps<T>) {
                         addFilter(filter);
                     }
                 }
-                break;
-            }
-            case "A": {
-                e.preventDefault();
-                addNewFilter();
+                else if (selectedIndex === -1 || hints.length === 0) {
+                    addNewFilter();
+                }
+                setSelectedIndex(-1);
                 break;
             }
         }
@@ -134,7 +133,7 @@ export default function SearchBar<T>(props: SearchBarProps<T>) {
                         {
                             filters?.map((element, i) => {
                                 return (
-                                    <SingleFilterBox filterData={element} onFilterDelete={onFilterDelete} key={i} index={i}/>
+                                    <SingleFilterBox filterData={element} onFilterDelete={onFilterDelete} key={i} index={i} />
                                 )
                             })
                         }
@@ -142,8 +141,7 @@ export default function SearchBar<T>(props: SearchBarProps<T>) {
                     <Search className={styles.search_icon} />
                     <input className={styles.search_input} type='search' placeholder='Search here' onChange={(e) => setSearch(e.target.value)} onKeyDown={onKeyDown} value={search} ref={inputRef} data-testid="searchBarInput" />
                     <div className={styles.navigation_info_box}>
-                        <KeyInfo keyText="A" info="Add currently typed tag" />
-                        <KeyInfo keyText="↲ Enter" info="Choose tag from list" />
+                        <KeyInfo keyText="↲ Enter" info="Choose tag from list or add currently typed tag if neither is selected" />
                         <KeyInfo keyText="ᛨ Arrows" info="Navigate" />
                         <KeyInfo keyText="Mouse Click" info="Choose tag from list" />
                         <KeyInfo keyText="Mouse Dbl Click" info="Add tag" />

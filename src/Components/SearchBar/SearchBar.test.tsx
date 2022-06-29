@@ -18,13 +18,13 @@ describe('testing SearchBarComponent', () => {
 
         expect(hintsList.childElementCount).toEqual(1);
         const hint = screen.getByRole('button');
-        expect(hint).toHaveTextContent('javascriptEnter');
+        expect(hint).toHaveTextContent('javascript');
     });
 
-    test('after "javas" input and enter click there is one filter with "javascript"', async () => {
+    test('after "javas" input, ArrowDown and Enter click there is one filter with "javascript"', async () => {
         render(<SearchBar data={json} convertDataCallback={convertTags} />);
         const input = screen.getByTestId(/searchBarInput/);
-        userEvent.type(input, 'javas{Enter}');
+        userEvent.type(input, 'javas{ArrowDown}{Enter}');
         const filtersList = screen.getByTestId(/testFiltersList/);
         expect(filtersList.childElementCount).toEqual(1);
         expect(filtersList.childNodes[0]).toHaveTextContent('javascript');
@@ -33,7 +33,7 @@ describe('testing SearchBarComponent', () => {
     test('after deleting filter there is one less filter', async () => {
         render(<SearchBar data={json} convertDataCallback={convertTags} />);
         const input = screen.getByTestId(/searchBarInput/);
-        userEvent.type(input, 'javas{Enter}');
+        userEvent.type(input, 'javas{ArrowDown}{Enter}');
         const filtersList = screen.getByTestId(/testFiltersList/);
         expect(filtersList.childElementCount).toEqual(1);
         const jsFilterButton = screen.getByTitle('javascript');
