@@ -106,14 +106,14 @@ export default function SearchBar<T>(props: SearchBarProps<T>) {
         }
     }
 
-    function onHintSelection(e: React.MouseEvent<HTMLButtonElement>, index?: number) {
+    function onHintSelection(index?: number) {
         if (index !== undefined && index >= 0)
             setSelectedIndex(index);
         if (inputRef.current)
             inputRef.current.focus();
     }
 
-    function onHintDoubleSelection(e: React.MouseEvent<HTMLButtonElement>) {
+    function onHintDoubleSelection() {
         const filter = hints.at(selectedIndex);
         if (filter && !filters.includes(filter)) {
             addFilter(filter, true, false);
@@ -147,7 +147,7 @@ export default function SearchBar<T>(props: SearchBarProps<T>) {
                     {
                         hints?.map((hint, i) => {
                             return (
-                                <Hint hintData={hint} isSelected={i === selectedIndex} hintIndex={i} key={i} searchText={search} onHintSelection={onHintSelection} onDoubleHintSelection={onHintDoubleSelection} />
+                                <Hint hintData={hint} isSelected={i === selectedIndex} hintIndex={i} key={i} searchText={search} onHintSelection={(_,index)=>onHintSelection(index)} onDoubleHintSelection={onHintDoubleSelection} />
                             )
                         })
                     }
