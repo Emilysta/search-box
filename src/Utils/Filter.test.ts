@@ -23,4 +23,15 @@ describe('testing filterData function', () => {
         const searchText = 'javascripts';
         expect(filterData(searchText, convertedData)).toEqual([]);
     });
+
+    test('"css" string should result in array with more than 1 element', () => {
+        const searchText = 'css';
+        expect(filterData(searchText, convertedData)).toHaveLength(2);
+    });
+
+    test('string with special characters should result in empty array and not throw exception', () => {
+        const searchText = '~`@#%&:;"\'.*+?^${}()[]|/\\';
+        expect(() => filterData(searchText, convertedData)).not.toThrow();
+        expect(filterData(searchText, convertedData)).toEqual([]);
+    });
 });
