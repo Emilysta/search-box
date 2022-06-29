@@ -26,9 +26,9 @@ test('renders without errors', () => {
 
 test('if loading exists', async () => {
   render(<App />);
-  const text = screen.getByTestId(/loadingTest/);
-  expect(text).toBeInTheDocument();
-  expect(text).toHaveTextContent('Loading data...');
+  const divElement = screen.getByTestId(/loadingTest/);
+  expect(divElement).toBeInTheDocument();
+  expect(divElement).toHaveTextContent('Loading data...');
 });
 
 test('if data exists', async () => {
@@ -37,8 +37,8 @@ test('if data exists', async () => {
   );
   render(<App />);
   await waitForElementToBeRemoved(() => screen.queryByTestId(/loadingTest/));
-  const text = screen.getByTestId(/dataTest/);
-  expect(text).toBeInTheDocument();
+  const divElement = screen.getByTestId(/dataTest/);
+  expect(divElement).toBeInTheDocument();
 });
 
 test('if error exists', async () => {
@@ -47,8 +47,8 @@ test('if error exists', async () => {
   );
   render(<App />);
   await waitForElementToBeRemoved(() => screen.queryByTestId(/loadingTest/));
-  const text = screen.getByTestId(/errorTest/);
-  expect(text).toBeInTheDocument();
-  expect(text).toHaveTextContent('Ops. Something went wrong.');
+  const divElement = screen.getByTestId(/errorTest/);
+  expect(divElement).toBeInTheDocument();
+  expect(divElement).toHaveTextContent('Ops. Something went wrong.');
 });
 

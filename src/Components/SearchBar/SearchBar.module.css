@@ -24,6 +24,15 @@
     align-items: center;
 }
 
+.filters_box{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 12px;
+    gap: 10px;
+    align-items: center;
+}
+
 .search_icon{
     fill: var(--bg-color);
 }

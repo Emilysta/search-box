@@ -18,8 +18,8 @@ export default function SingleFilterBox<T>(props: SingleFilterBoxProps<T>) {
 
     return (
         <div className={styles.filter_box}>
-            <p title={text}>{text ?? 'no text'}</p>
-            <button className={styles.close_button} onClick={onClick}><XLg /></button>
+            <p>{text ?? 'no text'}</p>
+            <button className={styles.close_button} onClick={onClick} title={text}><XLg /></button>
         </div>
     )
 }

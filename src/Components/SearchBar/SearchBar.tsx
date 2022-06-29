@@ -92,9 +92,11 @@ export default function SearchBar<T>(props: SearchBarProps<T>) {
                 break;
             }
             case "Enter": {
-                const filter = hints.at(selectedIndex);
-                if (filter && !filters.includes(filter)) {
-                    addFilter(filter);
+                if (selectedIndex >= 0 && selectedIndex < hints.length) {
+                    const filter = hints[selectedIndex];
+                    if (filter && !filters.includes(filter)) {
+                        addFilter(filter);
+                    }
                 }
                 break;
             }
@@ -114,9 +116,11 @@ export default function SearchBar<T>(props: SearchBarProps<T>) {
     }
 
     function onHintDoubleSelection() {
-        const filter = hints.at(selectedIndex);
-        if (filter && !filters.includes(filter)) {
-            addFilter(filter, true, false);
+        if (selectedIndex >= 0 && selectedIndex < hints.length) {
+            const filter = hints[selectedIndex];
+            if (filter && !filters.includes(filter)) {
+                addFilter(filter, true, false);
+            }
         }
         if (inputRef.current)
             inputRef.current.focus();
@@ -126,15 +130,17 @@ export default function SearchBar<T>(props: SearchBarProps<T>) {
         <>
             <div className={styles.search_box} >
                 <div className={styles.search_bar_box}>
-                    {
-                        filters?.map((element, i) => {
-                            return (
-                                <SingleFilterBox filterData={element} onFilterDelete={onFilterDelete} key={i} index={i} />
-                            )
-                        })
-                    }
+                    <div data-testid='testFiltersList' className={styles.filters_box}>
+                        {
+                            filters?.map((element, i) => {
+                                return (
+                                    <SingleFilterBox filterData={element} onFilterDelete={onFilterDelete} key={i} index={i}/>
+                                )
+                            })
+                        }
+                    </div>
                     <Search className={styles.search_icon} />
-                    <input className={styles.search_input} type='search' placeholder='Search here' onChange={(e) => setSearch(e.target.value)} onKeyDown={onKeyDown} value={search} ref={inputRef} />
+                    <input className={styles.search_input} type='search' placeholder='Search here' onChange={(e) => setSearch(e.target.value)} onKeyDown={onKeyDown} value={search} ref={inputRef} data-testid="searchBarInput" />
                     <div className={styles.navigation_info_box}>
                         <KeyInfo keyText="A" info="Add currently typed tag" />
                         <KeyInfo keyText="↲ Enter" info="Choose tag from list" />
@@ -143,11 +149,11 @@ export default function SearchBar<T>(props: SearchBarProps<T>) {
                         <KeyInfo keyText="Mouse Dbl Click" info="Add tag" />
                     </div>
                 </div>
-                <div className={styles.search_dropdown}>
+                <div className={styles.search_dropdown} data-testid="testHintsList">
                     {
                         hints?.map((hint, i) => {
                             return (
-                                <Hint hintData={hint} isSelected={i === selectedIndex} hintIndex={i} key={i} searchText={search} onHintSelection={(_,index)=>onHintSelection(index)} onDoubleHintSelection={onHintDoubleSelection} />
+                                <Hint hintData={hint} isSelected={i === selectedIndex} hintIndex={i} key={i} searchText={search} onHintSelection={(_, index) => onHintSelection(index)} onDoubleHintSelection={onHintDoubleSelection} />
                             )
                         })
                     }
