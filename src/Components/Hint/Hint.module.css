@@ -1,4 +1,4 @@
-.hint{
+.hint_box{
     padding: 8px;
     border-radius: 5px;
     border: 1px solid transparent;
@@ -13,19 +13,19 @@
     font-size: 15px;
 }
 
-.hint:hover{
+.hint_box:hover{
     background-color: var(--light-pink);
 }
 
-.hint.selected{
+.hint_box.selected{
     background-color: var(--grey);
 }
 
-.hint.selected:hover{
+.hint_box.selected:hover{
     background-color: var(--light-pink);
 }
 
-.hint p{
+.hint_box p{
     flex-shrink: 2;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -33,7 +33,7 @@
     user-select: none;
 }
 
-.hint p strong{
+.hint_box p strong{
     color: var(--pink);
 }
 

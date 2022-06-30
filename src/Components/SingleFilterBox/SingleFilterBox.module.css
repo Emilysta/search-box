@@ -21,7 +21,7 @@
     flex-shrink: 2;
 }
 
-.close_button{
+.filter_close_button{
     flex-shrink: 0;
     cursor: pointer;
     border: none;
@@ -32,6 +32,6 @@
     align-items: center;
 }
 
-.close_button:hover svg{
+.filter_close_button:hover svg{
     fill: var(--pink);
 }

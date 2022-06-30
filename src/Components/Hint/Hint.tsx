@@ -41,7 +41,7 @@ export default function Hint<T>(props: HintProps<T>) {
     }
 
     return (
-        <button className={`${styles.hint} ${props.isSelected ? styles.selected : ''}`}
+        <button className={`${styles.hint_box} ${props.isSelected ? styles.selected : ''}`}
             onClick={onClick} onDoubleClick={onDoubleClick}>
             {hintText()}
             {props.isSelected &&
