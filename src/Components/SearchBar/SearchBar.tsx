@@ -127,9 +127,9 @@ export default function SearchBar<T>(props: SearchBarProps<T>) {
 
     return (
         <>
-            <div className={styles.search_box} >
-                <div className={styles.search_bar_box}>
-                    <div data-testid='testFiltersList' className={styles.filters_box}>
+            <div className={styles.searchBox} >
+                <div className={styles.searchBarBox}>
+                    <div data-testid='testFiltersList' className={styles.filtersBox}>
                         {
                             filters?.map((element, i) => {
                                 return (
@@ -138,16 +138,16 @@ export default function SearchBar<T>(props: SearchBarProps<T>) {
                             })
                         }
                     </div>
-                    <Search className={styles.search_icon} />
-                    <input className={styles.search_input} type='search' placeholder='Search here' onChange={(e) => setSearch(e.target.value)} onKeyDown={onKeyDown} value={search} ref={inputRef} data-testid="searchBarInput" />
-                    <div className={styles.navigation_info_box}>
+                    <Search className={styles.searchIcon} />
+                    <input className={styles.searchInput} type='search' placeholder='Search here' onChange={(e) => setSearch(e.target.value)} onKeyDown={onKeyDown} value={search} ref={inputRef} data-testid="searchBarInput" />
+                    <div className={styles.navigationInfoBox}>
                         <KeyInfo keyText="↲ Enter" info="Choose tag from list or add currently typed tag if neither is selected" />
                         <KeyInfo keyText="ᛨ Arrows" info="Navigate" />
                         <KeyInfo keyText="Mouse Click" info="Choose tag from list" />
                         <KeyInfo keyText="Mouse Dbl Click" info="Add tag" />
                     </div>
                 </div>
-                <div className={styles.search_dropdown} data-testid="testHintsList">
+                <div className={styles.searchDropdown} data-testid="testHintsList">
                     {
                         hints?.map((hint, i) => {
                             return (

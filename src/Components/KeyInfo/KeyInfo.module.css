@@ -1,4 +1,4 @@
-.key_info_box{
+.keyInfoBox{
     display: flex;
     flex-direction: row;
     column-gap: 5px;
@@ -8,7 +8,7 @@
     color: var(--dark-text);
 }
 
-.key_info_key{
+.keyInfoKey{
     border: 1px solid var(--darker-grey);
     border-radius: 5px;
     padding: 5px;

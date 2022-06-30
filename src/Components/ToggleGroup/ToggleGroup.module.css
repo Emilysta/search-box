@@ -1,4 +1,4 @@
-.toggle_group{
+.toggleGroup{
     border-radius: 5px;
     background-color: var(--search-bg-color);
     color: var(--dark-text);
@@ -7,22 +7,22 @@
     overflow: hidden;
 }
 
-.toggle_group.vertical_group{
+.toggleGroup.verticalGroup{
     display: flex;
     flex-direction: column;
 }
 
-.toggle_group.horizontal_group{
+.toggleGroup.horizontalGroup{
     display: flex;
     flex-direction: row;
     justify-content: stretch;
 }
 
-.toggle_group_item{
+.toggleGroupItem{
     position: relative;
 }
 
-.toggle_group_item input{
+.toggleGroupItem input{
     position: absolute;
     top: 0;
     left: 0;
@@ -33,11 +33,11 @@
     opacity: 0;
 }
 
-.toggle_group_item p{
+.toggleGroupItem p{
     padding: 12px 20px;  
     pointer-events: none;
 }
 
-.toggle_group_item input:checked~p{
+.toggleGroupItem input:checked~p{
     background-color: var(--grey);
 }

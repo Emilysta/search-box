@@ -70,7 +70,7 @@ function App() {
   }
   else if (data) {
     return (
-      <div className={styles.App} data-testid='dataTest'>
+      <div className={styles.app} data-testid='dataTest'>
         <ToggleGroup buttonsList={['Posts', 'Users', 'Photos', 'Tags']} name='dataToggleBar' onSelectionChange={onSelectionChange} />
         Data search box:
         <SearchBar data={data} convertDataCallback={convertSearchBarData} />

@@ -1,4 +1,4 @@
-.hint_box{
+.hintBox{
     padding: 8px;
     border-radius: 5px;
     border: 1px solid transparent;
@@ -13,19 +13,19 @@
     font-size: 15px;
 }
 
-.hint_box:hover{
+.hintBox:hover{
     background-color: var(--light-pink);
 }
 
-.hint_box.selected{
+.hintBox.selected{
     background-color: var(--grey);
 }
 
-.hint_box.selected:hover{
+.hintBox.selected:hover{
     background-color: var(--light-pink);
 }
 
-.hint_box p{
+.hintBox p{
     flex-shrink: 2;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -33,11 +33,11 @@
     user-select: none;
 }
 
-.hint_box p strong{
+.hintBox p strong{
     color: var(--pink);
 }
 
-.hint_enter_icon{
+.hintEnterIcon{
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -49,6 +49,6 @@
     font-size: 12px;
 }
 
-.hint_enter_icon svg{
+.hintEnterIcon svg{
     fill: var(--darker-grey);
 }

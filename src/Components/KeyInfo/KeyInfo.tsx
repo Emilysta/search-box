@@ -7,8 +7,8 @@ type KeyInfoProps = {
 
 export default function KeyInfo(props: KeyInfoProps) {
     return (
-        <div className={styles.key_info_box}>
-            <div className={styles.key_info_key}>
+        <div className={styles.keyInfoBox}>
+            <div className={styles.keyInfoKey}>
                 {props.keyText}
             </div>
             {props.info}

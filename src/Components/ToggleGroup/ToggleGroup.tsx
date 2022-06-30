@@ -15,10 +15,10 @@ export default function ToggleGroup(props: ToggleGroupProps) {
     }
 
     return (
-        <ul className={`${styles.toggle_group} ${props.isVertical ? styles.vertical_group : styles.horizontal_group}`}>
+        <ul className={`${styles.toggleGroup} ${props.isVertical ? styles.verticalGroup : styles.horizontalGroup}`}>
             {props.buttonsList.map((element, i) => {
                 return (
-                    <li key={i} className={styles.toggle_group_item}>
+                    <li key={i} className={styles.toggleGroupItem}>
                         <input type='radio' name={props.name} value={element} onChange={onSelectionChange} defaultChecked={i === 0} />
                         <p>{element}</p>
                     </li>
